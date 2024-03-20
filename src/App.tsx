@@ -18,16 +18,12 @@ function App() {
         { id: v1(), title: "React", isDone: false },
     ]);
 
-    console.log(tasks);
-
-
     const [filter, setFilter] = useState<FilterValueType>("all");
 
     let currentTask = tasks;
     if (filter === "active") currentTask = tasks.filter(task => !task.isDone);
     if (filter === "completed") currentTask = tasks.filter(task => task.isDone);
 
-    // UI
     function fAddTask(taskTitle: string) {
         const newTask = {
             id: v1(),
@@ -43,13 +39,18 @@ function App() {
         setTasks(filterTasks);
     }
 
+    function fChangeTaskChekedValue(taskId: string, taskValue: boolean) {
+        const newTasks = tasks.map(t => (t.id === taskId ? {...t, isDone: taskValue} : t));
+        setTasks(newTasks);
+    }
+
     function fChangeFilterValue(value: FilterValueType) {
         setFilter(value);
     }
 
     return (
         <div className="App">
-            <Todolist title={"My Todolist"} tasks={currentTask} addTask={fAddTask} removeTask={fRemoveTask} changeFilterValue={fChangeFilterValue} />
+            <Todolist title={"My Todolist"} tasks={currentTask} filter={filter} addTask={fAddTask} removeTask={fRemoveTask} changeTaskChekedValue={fChangeTaskChekedValue} changeFilterValue={fChangeFilterValue} />
         </div>
     );
 }

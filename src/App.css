@@ -6,3 +6,30 @@
 .App > div {
   margin-right: 50px;
 }
+
+.errorInput {
+  border: 2px red solid;
+}
+
+.errorInputMessage {
+  color: red;
+}
+
+.task-isDone {
+  opacity: 0.4;
+}
+
+.tab-btn {
+  margin-left: 10px;
+
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.tab-btn:first-of-type {
+  margin-left: 0;
+}
+
+.active-tab-btn {
+  background-color: aquamarine;
+}
