@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { Todolist } from './components/todolist/Todolist';
 import { v1 } from 'uuid';
+import { AddItemForm } from './components/AddItemForm';
 
 export type TasksType = {
     id: string,
@@ -52,10 +53,27 @@ function App() {
         },
     })
 
+
+    function fAddTodolist(tdlTitle: string) {
+        const newId = v1();
+
+        const newTodolist = {
+            id: newId,
+            title: tdlTitle,
+        }
+
+        setTodolists([...todolists, newTodolist]);
+        setTasks({ ...tasks, [newId]: { data: [], filter: 'all' } })
+    }
+
     function fRemoveTodolist(todolistId: string) {
         setTodolists(todolists.filter(tl => tl.id !== todolistId));
         delete tasks[todolistId];
         setTasks({ ...tasks })
+    }
+
+    function fUpdateTitleTodolist(todolistId: string, newTitle: string) {
+        setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, title: newTitle} : tl))
     }
 
     function fAddTask(todolistId: string, taskTitle: string) {
@@ -76,18 +94,23 @@ function App() {
         setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.map(task => task.id === taskId ? { ...task, isDone: taskValue } : task) } })
     }
 
+    function fUpdateTitleTask(todolistId: string, taskId: string, newTitle: string) {
+        setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.map(task => task.id === taskId ? { ...task, title: newTitle } : task) } })
+    }
+
     function fChangeFilterValue(todolistId: string, value: FilterValueType) {
-        setTasks({...tasks, [todolistId]: {...tasks[todolistId], filter: value}})
+        setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], filter: value } })
     }
 
     return (
         <div className="App">
+            <AddItemForm addItem={fAddTodolist} />
             {todolists.map((tl) => {
                 return (
                     <Todolist
                         key={tl.id}
                         todolistId={tl.id}
-                        title={tl.title}
+                        todolistTitle={tl.title}
                         tasks={tasks[tl.id].data}
                         filter={tasks[tl.id].filter}
                         removeTodolist={fRemoveTodolist}
@@ -95,6 +118,8 @@ function App() {
                         removeTask={fRemoveTask}
                         changeTaskChekedValue={fChangeTaskChekedValue}
                         changeFilterValue={fChangeFilterValue}
+                        updateTitleTask={fUpdateTitleTask}
+                        updateTitleTodolist={fUpdateTitleTodolist}
                     />
                 )
             })}
