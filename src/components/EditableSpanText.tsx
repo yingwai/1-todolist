@@ -1,3 +1,4 @@
+import TextField from '@mui/material/TextField';
 import React, { useState, KeyboardEvent, ChangeEvent } from 'react';
 
 type SpanTextPropsType = {
@@ -27,7 +28,17 @@ export const EditableSpanText = ({ oldTitle, updateTitleItem }: SpanTextPropsTyp
 
     return (
         isEdit
-            ? <input type="text" autoFocus value={newTitle} onBlur={onChangeEditText} onKeyUp={onKeyUpInputHandler} onChange={fChangeTitleValue} />
+            ?
+            <TextField
+                id="outlined-basic"
+                variant="outlined"
+                size='small'
+                autoFocus
+                value={newTitle}
+                onBlur={onChangeEditText}
+                onKeyUp={onKeyUpInputHandler}
+                onChange={fChangeTitleValue}
+            />
             : <span onDoubleClick={onChangeEditText}>{oldTitle}</span>
     );
 };

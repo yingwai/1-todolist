@@ -1,8 +1,15 @@
 import React, { ChangeEvent } from 'react';
 import { FilterValueType, TasksType } from '../../App';
-import { Button } from '../button/Button';
+// import { Button } from '../button/Button';
 import { AddItemForm } from '../AddItemForm';
 import { EditableSpanText } from '../EditableSpanText';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Box from '@mui/material/Box';
 
 type TodoListPropsType = {
     todolistId: string,
@@ -32,7 +39,7 @@ export const Todolist = (
     function fAddTaskHandler(title: string) {
         addTask(todolistId, title)
     }
-    
+
     function fUpdateTitleTask(taskId: string, newTitle: string) {
         updateTitleTask(todolistId, taskId, newTitle);
     }
@@ -47,53 +54,66 @@ export const Todolist = (
                 <h3>
                     <EditableSpanText oldTitle={todolistTitle} updateTitleItem={fUpdateTitleTodolist} />
                 </h3>
-                <Button
-                    title={"x"}
-                    onClick={() => removeTodolist(todolistId)}
-                />
+                <IconButton aria-label="delete" onClick={() => removeTodolist(todolistId)}>
+                    <DeleteIcon />
+                </IconButton>
             </div>
             <AddItemForm addItem={fAddTaskHandler} />
 
-            {currentTask.length === 0 ?
-                <p>Тасок нет</p> :
-                <ul>
-                    {currentTask.map(task => {
-                        function fRemoveTaskHandler() {
-                            removeTask(todolistId, task.id)
-                        }
+            {
+                currentTask.length === 0 ?
+                    <p>Тасок нет</p> :
+                    <List>
+                        {currentTask.map(task => {
+                            function fRemoveTaskHandler() {
+                                removeTask(todolistId, task.id)
+                            }
 
-                        function fChangeTaskChekedValue(e: ChangeEvent<HTMLInputElement>) {
-                            changeTaskChekedValue(todolistId, task.id, e.currentTarget.checked);
-                        }
+                            function fChangeTaskChekedValue(e: ChangeEvent<HTMLInputElement>) {
+                                changeTaskChekedValue(todolistId, task.id, e.currentTarget.checked);
+                            }
 
-                        return (
-                            <li key={task.id} className={task.isDone ? "task-isDone" : ""}>
-                                <input type="checkbox" checked={task.isDone} onChange={fChangeTaskChekedValue} />
-                                <EditableSpanText oldTitle={task.title} updateTitleItem={(newTitle: string) => fUpdateTitleTask(task.id, newTitle)} />
-                                <Button title={"x"} onClick={fRemoveTaskHandler} />
-                            </li>
-                        )
-                    })}
-                </ul>
+                            return (
+                                <ListItem
+                                    key={task.id}
+                                    sx={{ p: '0', justifyContent: 'space-between', opacity: task.isDone ? '0.4' : "1" }}
+                                >
+                                    <div>
+                                        <Checkbox checked={task.isDone} onChange={fChangeTaskChekedValue} />
+                                        <EditableSpanText oldTitle={task.title} updateTitleItem={(newTitle: string) => fUpdateTitleTask(task.id, newTitle)} />
+                                    </div>
+                                    <IconButton aria-label="delete" onClick={fRemoveTaskHandler}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </ListItem>
+                            )
+                        })}
+                    </List>
             }
 
-            <div>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '8px'}}>
                 <Button
-                    className={filter === "all" ? "tab-btn active-tab-btn" : "tab-btn"}
-                    title={"All"}
+                    variant={filter === 'all' ? 'contained' : 'outlined'}
+                    color='success'
                     onClick={() => fChangeFilterValueHandler("all")}
-                />
+                >
+                    All
+                </Button>
                 <Button
-                    className={filter === "active" ? "tab-btn active-tab-btn" : "tab-btn"}
-                    title={"Active"}
+                    variant={filter === 'active' ? 'contained' : 'outlined'}
+                    color={'primary'}
                     onClick={() => fChangeFilterValueHandler("active")}
-                />
+                >
+                    Active
+                </Button>
                 <Button
-                    className={filter === "completed" ? "tab-btn active-tab-btn" : "tab-btn"}
-                    title={"Completed"}
+                    variant={filter === 'completed' ? 'contained' : 'outlined'}
+                    color={'secondary'}
                     onClick={() => fChangeFilterValueHandler("completed")}
-                />
-            </div>
-        </div>
+                >
+                    Completed
+                </Button>
+            </Box>
+        </div >
     );
 };
