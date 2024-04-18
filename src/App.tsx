@@ -32,7 +32,7 @@ type TaskInStateType = {
 
 export type FilterValueType = 'all' | 'active' | 'completed';
 
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
 }
@@ -49,7 +49,7 @@ function App() {
     })
 
     const changeModeHandler = () => {
-        setThemeMode(themeMode == 'light' ? 'dark' : 'light')
+        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
     }
 
     let todolistID1 = v1()
@@ -80,25 +80,25 @@ function App() {
 
 
     function fAddTodolist(tdlTitle: string) {
-        const newId = v1();
+        // const newId = v1();
 
-        const newTodolist = {
-            id: newId,
-            title: tdlTitle,
-        }
+        // const newTodolist = {
+        //     id: newId,
+        //     title: tdlTitle,
+        // }
 
-        setTodolists([...todolists, newTodolist]);
-        setTasks({ ...tasks, [newId]: { data: [], filter: 'all' } })
+        // setTodolists([...todolists, newTodolist]);
+        // setTasks({ ...tasks, [newId]: { data: [], filter: 'all' } })
     }
 
     function fRemoveTodolist(todolistId: string) {
-        setTodolists(todolists.filter(tl => tl.id !== todolistId));
-        delete tasks[todolistId];
-        setTasks({ ...tasks })
+        // setTodolists(todolists.filter(tl => tl.id !== todolistId));
+        // delete tasks[todolistId];
+        // setTasks({ ...tasks })
     }
 
     function fUpdateTitleTodolist(todolistId: string, newTitle: string) {
-        setTodolists(todolists.map(tl => tl.id === todolistId ? { ...tl, title: newTitle } : tl))
+        // setTodolists(todolists.map(tl => tl.id === todolistId ? { ...tl, title: newTitle } : tl))
     }
 
     function fAddTask(todolistId: string, taskTitle: string) {
