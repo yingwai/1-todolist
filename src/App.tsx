@@ -21,7 +21,7 @@ export type TasksType = {
     isDone: boolean
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: TaskInStateType
 }
 
@@ -102,25 +102,25 @@ function App() {
     }
 
     function fAddTask(todolistId: string, taskTitle: string) {
-        const newTask = {
-            id: v1(),
-            title: taskTitle,
-            isDone: false
-        }
+        // const newTask = {
+        //     id: v1(),
+        //     title: taskTitle,
+        //     isDone: false
+        // }
 
-        setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: [newTask, ...tasks[todolistId].data] } });
+        // setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: [newTask, ...tasks[todolistId].data] } });
     }
 
     function fRemoveTask(todolistId: string, taskId: string) {
-        setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.filter(task => task.id !== taskId) } });
+        // setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.filter(task => task.id !== taskId) } });
     }
 
     function fChangeTaskChekedValue(todolistId: string, taskId: string, taskValue: boolean) {
-        setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.map(task => task.id === taskId ? { ...task, isDone: taskValue } : task) } })
+        // setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.map(task => task.id === taskId ? { ...task, isDone: taskValue } : task) } })
     }
 
     function fUpdateTitleTask(todolistId: string, taskId: string, newTitle: string) {
-        setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.map(task => task.id === taskId ? { ...task, title: newTitle } : task) } })
+        // setTasks({ ...tasks, [todolistId]: { ...tasks[todolistId], data: tasks[todolistId].data.map(task => task.id === taskId ? { ...task, title: newTitle } : task) } })
     }
 
     function fChangeFilterValue(todolistId: string, value: FilterValueType) {

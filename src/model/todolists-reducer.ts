@@ -5,6 +5,7 @@ import { TodolistType } from '../App'
 export type AddTodolistActionType = {
     type: 'ADD-TODOLIST'
     payload: {
+        id: string
         title: string
     }
 }
@@ -38,7 +39,7 @@ const initialState: TodolistType[] = [
 export const todolistsReducer = (state: TodolistType[] = initialState, action: ActionsType): TodolistType[] => {
     switch (action.type) {
         case "ADD-TODOLIST":
-            const newTodolist = { id: v1(), title: "New Todolist" }
+            const newTodolist = { id: action.payload.id, title: "New Todolist" }
 
             return [...state, newTodolist];
         case "REMOVE-TODOLIST":
@@ -51,7 +52,7 @@ export const todolistsReducer = (state: TodolistType[] = initialState, action: A
 }
 
 export const addTodolistAC = (title: string): AddTodolistActionType => {
-    return { type: 'ADD-TODOLIST', payload: { title } } as const
+    return { type: 'ADD-TODOLIST', payload: { id: v1(), title } } as const
 }
 
 export const removeTodolistAC = (id: string): RemoveTodolistActionType => {
