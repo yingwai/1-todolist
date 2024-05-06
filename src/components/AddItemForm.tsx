@@ -1,11 +1,8 @@
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import React, { KeyboardEvent, useState } from 'react';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import Box from '@mui/material/Box';
-
-// import { Button } from './button/Button';
 
 type ItemProps = {
     addItem: (taskTitle: string) => void,
@@ -19,9 +16,7 @@ export const AddItemForm = ({ addItem }: ItemProps) => {
     const nMinLimitValueTitle = 5;
 
     function fItemHandler() {
-        if (taskTitle.trim() === "") return (setErrorInput("Title is required"), setTaskTitle(""));
-
-        if (taskTitle.length < nMinLimitValueTitle) return;
+        if (taskTitle.trim() === "" || taskTitle.length < nMinLimitValueTitle) return (setErrorInput("Title is required"));
 
         addItem(taskTitle.trim());
         setTaskTitle("");

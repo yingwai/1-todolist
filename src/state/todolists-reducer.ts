@@ -26,28 +26,22 @@ export type ChangeTodolistTitleActionType = {
 
 type ActionsType = RemoveTodolistActionType
     | AddTodolistActionType
-    | ChangeTodolistTitleActionType
+    | ChangeTodolistTitleActionType;
 
-let todolistID1 = v1()
-let todolistID2 = v1()
+const initTodolistState: TodolistType[] = []
 
-const initialState: TodolistType[] = [
-    { id: todolistID1, title: 'What to learn' },
-    { id: todolistID2, title: 'What to buy' },
-];
-
-export const todolistsReducer = (state: TodolistType[] = initialState, action: ActionsType): TodolistType[] => {
+export const todolistsReducer = (state = initTodolistState, action: ActionsType): TodolistType[] => {
     switch (action.type) {
         case "ADD-TODOLIST":
-            const newTodolist = { id: action.payload.id, title: "New Todolist" }
+            const newTodolist = { id: action.payload.id, title: action.payload.title }
 
             return [...state, newTodolist];
         case "REMOVE-TODOLIST":
             return state.filter(el => el.id !== action.payload.id);
         case "CHANGE-TODOLIST-TITLE":
-            return state.map(el => el.id === action.payload.id ? { ...el, title: 'New Todolist' } : el);
+            return state.map(el => el.id === action.payload.id ? { ...el, title: action.payload.title } : el);
         default:
-            throw new Error("undefind command");
+            return state;
     }
 }
 
