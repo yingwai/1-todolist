@@ -1,12 +1,14 @@
 import TextField from '@mui/material/TextField';
-import React, { useState, KeyboardEvent, ChangeEvent } from 'react';
+import React, { useState, KeyboardEvent, ChangeEvent, memo } from 'react';
 
 type SpanTextPropsType = {
     oldTitle: string
     updateTitleItem: (newTitle: string) => void
 }
 
-export const EditableSpanText = ({ oldTitle, updateTitleItem }: SpanTextPropsType) => {
+export const EditableSpanText = memo(({ oldTitle, updateTitleItem }: SpanTextPropsType) => {
+    console.log("EditableSpanText");
+    
     const [isEdit, setIsEdit] = useState<boolean>(false);
     let [newTitle, setNewTitle] = useState<string>(oldTitle);
 
@@ -41,4 +43,4 @@ export const EditableSpanText = ({ oldTitle, updateTitleItem }: SpanTextPropsTyp
             />
             : <span onDoubleClick={onChangeEditText}>{oldTitle}</span>
     );
-};
+})

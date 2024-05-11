@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './App.css';
 import { AddItemForm } from './components/AddItemForm';
 import AppBar from '@mui/material/AppBar';
@@ -12,10 +12,11 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Switch from '@mui/material/Switch';
-import { addTodolistAC } from './state/todolists-reducer';
+import { addTodolistAC, changeTitleTodolistAC, removeTodolistAC } from './state/todolists-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './state/store';
-import { TodolistWithRedux } from './components/todolist/TodolistWithRedux';
+import { Todolist } from './components/todolist/Todolist';
+import { addTaskAC, changeTaskFilterAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from './state/tasks-reducer';
 
 export type TasksType = {
     id: string,
@@ -55,11 +56,40 @@ function AppWithReducer() {
     }
 
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists);
+    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
     const dispatch = useDispatch()
 
-    function fAddTodolist(tdlTitle: string) {
+    const fAddTodolist = useCallback((tdlTitle: string) => {
         dispatch(addTodolistAC(tdlTitle));
-    }
+    }, [dispatch])
+
+    const fRemoveTodolist = useCallback((todolistId: string) => {
+        dispatch(removeTodolistAC(todolistId));
+    }, [dispatch])
+
+    const fUpdateTitleTodolist = useCallback((todolistId: string, newTitle: string) => {
+        dispatch(changeTitleTodolistAC(todolistId, newTitle));
+    }, [dispatch])
+
+    const fAddTask = useCallback((todolistId: string, taskTitle: string) => {
+        dispatch(addTaskAC(todolistId, taskTitle));
+    }, [dispatch])
+
+    const fRemoveTask = useCallback((todolistId: string, taskId: string) => {
+        dispatch(removeTaskAC(todolistId, taskId));
+    }, [dispatch])
+
+    const fChangeTaskChekedValue = useCallback((todolistId: string, taskId: string, taskValue: boolean) => {
+        dispatch(changeTaskStatusAC(todolistId, taskId, taskValue));
+    }, [dispatch])
+
+    const fUpdateTitleTask = useCallback((todolistId: string, taskId: string, newTitle: string) => {
+        dispatch(changeTaskTitleAC(todolistId, taskId, newTitle));
+    }, [dispatch])
+
+    const fChangeFilterValue = useCallback((todolistId: string, value: FilterValueType) => {
+        dispatch(changeTaskFilterAC(todolistId, value));
+    }, [dispatch])
 
     return (
         <div>
@@ -83,14 +113,24 @@ function AppWithReducer() {
                     </Grid>
 
                     <Grid container spacing={4}>
-                        {todolists.map((tl) => {                            
+                        {todolists.map((tl) => {
                             return (
                                 <Grid item
                                     key={tl.id}>
                                     <Paper elevation={4} sx={{ p: '0 15px 15px 15px' }}>
-                                        <TodolistWithRedux
+                                        <Todolist
                                             key={tl.id}
-                                            todolist={tl}
+                                            todolistId={tl.id}
+                                            todolistTitle={tl.title}
+                                            tasks={tasks[tl.id].data}
+                                            filter={tasks[tl.id].filter}
+                                            removeTodolist={fRemoveTodolist}
+                                            addTask={fAddTask}
+                                            removeTask={fRemoveTask}
+                                            changeTaskChekedValue={fChangeTaskChekedValue}
+                                            changeFilterValue={fChangeFilterValue}
+                                            updateTitleTask={fUpdateTitleTask}
+                                            updateTitleTodolist={fUpdateTitleTodolist}
                                         />
                                     </Paper>
                                 </Grid>

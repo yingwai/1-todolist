@@ -1,6 +1,6 @@
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import React, { KeyboardEvent, useState } from 'react';
+import React, { KeyboardEvent, memo, useState } from 'react';
 import AddBoxIcon from '@mui/icons-material/AddBox'
 import Box from '@mui/material/Box';
 
@@ -8,7 +8,7 @@ type ItemProps = {
     addItem: (taskTitle: string) => void,
 }
 
-export const AddItemForm = ({ addItem }: ItemProps) => {
+export const AddItemForm = memo(({ addItem }: ItemProps) => {    
     let [errorInput, setErrorInput] = useState<string | null>(null);
 
     let [taskTitle, setTaskTitle] = useState<string>('');
@@ -23,17 +23,15 @@ export const AddItemForm = ({ addItem }: ItemProps) => {
     }
 
     function fItemOnKeyUpHandler(e: KeyboardEvent<HTMLDivElement>) {
-        setErrorInput(null);
+        if (errorInput) setErrorInput(null);
 
         if (e.key === "Enter") fItemHandler();
     }
-
 
     return (
         <div>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <TextField
-                    id="outlined-basic"
                     variant="outlined"
                     size='small'
                     label={!!errorInput ? errorInput : "Write a title"}
@@ -53,4 +51,4 @@ export const AddItemForm = ({ addItem }: ItemProps) => {
             </Box>
         </div>
     );
-};
+});
