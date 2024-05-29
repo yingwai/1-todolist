@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.css';
 import { AddItemForm } from './components/AddItemForm';
 import AppBar from '@mui/material/AppBar';
@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './state/store';
 import { Todolist } from './components/todolist/Todolist';
 import { addTaskAC, changeTaskFilterAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from './state/tasks-reducer';
+import { todolistAPI } from './api/todolist-api';
+import { taskAPI } from './api/task-api';
 
 export type TasksType = {
     id: string,
@@ -54,6 +56,11 @@ function AppWithReducer() {
     const changeModeHandler = () => {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light')
     }
+
+    useEffect(() => {
+        todolistAPI.getTodolists()
+        taskAPI.getTasks("7b528439-97b6-4d3a-8ec5-6ba3aa5b7d7e")
+    }, [])
 
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);

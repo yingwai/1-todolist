@@ -28,7 +28,8 @@ type ActionsType = RemoveTodolistActionType
     | AddTodolistActionType
     | ChangeTodolistTitleActionType;
 
-const initTodolistState: TodolistType[] = []
+let initTodolistState: TodolistType[] = [];
+
 
 export const todolistsReducer = (state = initTodolistState, action: ActionsType): TodolistType[] => {
     switch (action.type) {
