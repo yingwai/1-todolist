@@ -12,26 +12,19 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Switch from '@mui/material/Switch';
-import { addTodolistAC, changeTitleTodolistAC, removeTodolistAC } from './state/todolists-reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStateType } from './state/store';
-import { Todolist } from './components/todolist/Todolist';
-import { addTaskAC, changeTaskFilterAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from './state/tasks-reducer';
-import { todolistAPI } from './api/todolist-api';
-import { taskAPI } from './api/task-api';
-
-export type TasksType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
+import { addTodolistAC, changeTitleTodolistAC, getTodolistsTC, removeTodolistAC } from './state/todolists-reducer';
+import { useSelector } from 'react-redux';
+import { AppRootStateType, useAppDisspatch } from './state/store';
+import { addTaskTC, changeTaskFilterAC, changeTaskTitleAC, removeTaskTC, updateTaskStatusTC } from './state/tasks-reducer';
+import { TodolistWithThunkCreator } from './components/todolist/TodolistWithThunkCreator';
+import { TaskStatuses, TaskType } from './api/todolist-api';
 
 export type TasksStateType = {
     [key: string]: TaskInStateType
 }
 
-type TaskInStateType = {
-    data: TasksType[],
+export type TaskInStateType = {
+    data: TaskType[],
     filter: FilterValueType
 }
 
@@ -57,14 +50,13 @@ function AppWithReducer() {
         setThemeMode(themeMode === 'light' ? 'dark' : 'light')
     }
 
-    useEffect(() => {
-        todolistAPI.getTodolists()
-        taskAPI.getTasks("7b528439-97b6-4d3a-8ec5-6ba3aa5b7d7e")
-    }, [])
-
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
-    const dispatch = useDispatch()
+    const dispatch = useAppDisspatch()
+
+    useEffect(() => {
+        dispatch(getTodolistsTC())
+    }, [dispatch])
 
     const fAddTodolist = useCallback((tdlTitle: string) => {
         dispatch(addTodolistAC(tdlTitle));
@@ -79,15 +71,15 @@ function AppWithReducer() {
     }, [dispatch])
 
     const fAddTask = useCallback((todolistId: string, taskTitle: string) => {
-        dispatch(addTaskAC(todolistId, taskTitle));
+        dispatch(addTaskTC(todolistId, taskTitle));
     }, [dispatch])
 
     const fRemoveTask = useCallback((todolistId: string, taskId: string) => {
-        dispatch(removeTaskAC(todolistId, taskId));
+        dispatch(removeTaskTC(todolistId, taskId));
     }, [dispatch])
 
-    const fChangeTaskChekedValue = useCallback((todolistId: string, taskId: string, taskValue: boolean) => {
-        dispatch(changeTaskStatusAC(todolistId, taskId, taskValue));
+    const fChangeTaskChekedValue = useCallback((todolistId: string, taskId: string, status: TaskStatuses) => {
+        dispatch(updateTaskStatusTC(todolistId, taskId, status))
     }, [dispatch])
 
     const fUpdateTitleTask = useCallback((todolistId: string, taskId: string, newTitle: string) => {
@@ -125,7 +117,7 @@ function AppWithReducer() {
                                 <Grid item
                                     key={tl.id}>
                                     <Paper elevation={4} sx={{ p: '0 15px 15px 15px' }}>
-                                        <Todolist
+                                        <TodolistWithThunkCreator
                                             key={tl.id}
                                             todolistId={tl.id}
                                             todolistTitle={tl.title}

@@ -1,5 +1,7 @@
 import { v1 } from 'uuid'
 import { TodolistType } from '../App'
+import { Dispatch } from 'redux'
+import { todolistAPI } from '../api/todolist-api'
 
 
 export type AddTodolistActionType = {
@@ -23,16 +25,20 @@ export type ChangeTodolistTitleActionType = {
         title: string
     }
 }
+export type SetTodolistActionType = ReturnType<typeof setTodolistsAC>
 
 type ActionsType = RemoveTodolistActionType
     | AddTodolistActionType
-    | ChangeTodolistTitleActionType;
+    | ChangeTodolistTitleActionType
+    | SetTodolistActionType;
 
 let initTodolistState: TodolistType[] = [];
 
 
 export const todolistsReducer = (state = initTodolistState, action: ActionsType): TodolistType[] => {
     switch (action.type) {
+        case 'SET-TODOLISTS':
+            return action.payload.todolists;
         case "ADD-TODOLIST":
             const newTodolist = { id: action.payload.id, title: action.payload.title }
 
@@ -56,4 +62,17 @@ export const removeTodolistAC = (id: string): RemoveTodolistActionType => {
 
 export const changeTitleTodolistAC = (id: string, title: string): ChangeTodolistTitleActionType => {
     return { type: 'CHANGE-TODOLIST-TITLE', payload: { id, title } } as const
+}
+
+export const setTodolistsAC = (todolists: TodolistType[]) => {
+    return { type: 'SET-TODOLISTS', payload: { todolists } } as const
+}
+
+export const getTodolistsTC = () => {
+    return (dispatch: Dispatch) => {
+        todolistAPI.getTodolists()
+            .then(res => {                
+                dispatch(setTodolistsAC(res.data))
+            })
+    }
 }

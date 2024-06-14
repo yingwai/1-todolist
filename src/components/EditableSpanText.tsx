@@ -6,9 +6,7 @@ type SpanTextPropsType = {
     updateTitleItem: (newTitle: string) => void
 }
 
-export const EditableSpanText = memo(({ oldTitle, updateTitleItem }: SpanTextPropsType) => {
-    console.log("EditableSpanText");
-    
+export const EditableSpanText = memo(({ oldTitle, updateTitleItem }: SpanTextPropsType) => {    
     const [isEdit, setIsEdit] = useState<boolean>(false);
     let [newTitle, setNewTitle] = useState<string>(oldTitle);
 
