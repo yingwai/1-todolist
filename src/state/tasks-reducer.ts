@@ -51,7 +51,7 @@ export const tasksReducer = (state = initTaskState, action: ActionsType): TasksS
         case 'CHANGE-TASK-FILTER':
             return { ...state, [action.payload.todolistId]: { ...state[action.payload.todolistId], filter: action.payload.value } }
         case 'ADD-TODOLIST':
-            return { ...state, [action.payload.id]: { data: [], filter: 'all' } }
+            return { ...state, [action.payload.todolist.id]: { data: [], filter: 'all' } }
         case 'REMOVE-TODOLIST':
             let copyState = { ...state }
             delete (copyState[action.payload.id])
@@ -102,6 +102,30 @@ export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: D
         })
 }
 
+export const updateTaskTitleTC = (todolistId: string, taskId: string, title: string) => {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {  
+        const tasks = getState().tasks;
+        const task = tasks[todolistId].data.find(t => t.id === taskId)
+
+        if (task) {
+            const model: UpdateTaskModelType = {
+                title,
+                startDate: task.startDate,
+                priority: task.priority,
+                description: task.description,
+                deadline: task.deadline,
+                status: task.status,
+            }            
+
+            todolistAPI
+                .updateTask(todolistId, taskId, model)
+                .then(() => {
+                    dispatch(changeTaskTitleAC(todolistId, taskId, title))
+                })
+        }
+    }
+}
+
 export const updateTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {  
         const tasks = getState().tasks;
@@ -115,10 +139,7 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
                 description: task.description,
                 deadline: task.deadline,
                 status,
-            }
-
-            console.log(model);
-            
+            }            
 
             todolistAPI
                 .updateTask(todolistId, taskId, model)

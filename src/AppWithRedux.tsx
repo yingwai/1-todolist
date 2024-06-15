@@ -12,10 +12,10 @@ import Paper from '@mui/material/Paper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Switch from '@mui/material/Switch';
-import { addTodolistAC, changeTitleTodolistAC, getTodolistsTC, removeTodolistAC } from './state/todolists-reducer';
+import { createTodolistsTC, deleteTodolistsTC, getTodolistsTC, updateTodolistsTC } from './state/todolists-reducer';
 import { useSelector } from 'react-redux';
 import { AppRootStateType, useAppDisspatch } from './state/store';
-import { addTaskTC, changeTaskFilterAC, changeTaskTitleAC, removeTaskTC, updateTaskStatusTC } from './state/tasks-reducer';
+import { addTaskTC, changeTaskFilterAC, removeTaskTC, updateTaskStatusTC, updateTaskTitleTC } from './state/tasks-reducer';
 import { TodolistWithThunkCreator } from './components/todolist/TodolistWithThunkCreator';
 import { TaskStatuses, TaskType } from './api/todolist-api';
 
@@ -59,15 +59,15 @@ function AppWithReducer() {
     }, [dispatch])
 
     const fAddTodolist = useCallback((tdlTitle: string) => {
-        dispatch(addTodolistAC(tdlTitle));
+        dispatch(createTodolistsTC(tdlTitle));
     }, [dispatch])
 
     const fRemoveTodolist = useCallback((todolistId: string) => {
-        dispatch(removeTodolistAC(todolistId));
+        dispatch(deleteTodolistsTC(todolistId));
     }, [dispatch])
 
     const fUpdateTitleTodolist = useCallback((todolistId: string, newTitle: string) => {
-        dispatch(changeTitleTodolistAC(todolistId, newTitle));
+        dispatch(updateTodolistsTC(todolistId, newTitle));
     }, [dispatch])
 
     const fAddTask = useCallback((todolistId: string, taskTitle: string) => {
@@ -83,7 +83,7 @@ function AppWithReducer() {
     }, [dispatch])
 
     const fUpdateTitleTask = useCallback((todolistId: string, taskId: string, newTitle: string) => {
-        dispatch(changeTaskTitleAC(todolistId, taskId, newTitle));
+        dispatch(updateTaskTitleTC(todolistId, taskId, newTitle));
     }, [dispatch])
 
     const fChangeFilterValue = useCallback((todolistId: string, value: FilterValueType) => {
