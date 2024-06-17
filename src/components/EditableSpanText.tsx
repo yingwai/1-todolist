@@ -3,10 +3,11 @@ import React, { useState, KeyboardEvent, ChangeEvent, memo } from 'react';
 
 type SpanTextPropsType = {
     oldTitle: string
+    disabled: boolean
     updateTitleItem: (newTitle: string) => void
 }
 
-export const EditableSpanText = memo(({ oldTitle, updateTitleItem }: SpanTextPropsType) => {    
+export const EditableSpanText = memo(({ oldTitle, disabled, updateTitleItem }: SpanTextPropsType) => {    
     const [isEdit, setIsEdit] = useState<boolean>(false);
     let [newTitle, setNewTitle] = useState<string>(oldTitle);
 
@@ -35,6 +36,7 @@ export const EditableSpanText = memo(({ oldTitle, updateTitleItem }: SpanTextPro
                 size='small'
                 autoFocus
                 value={newTitle}
+                disabled={disabled}
                 onBlur={onChangeEditText}
                 onKeyUp={onKeyUpInputHandler}
                 onChange={fChangeTitleValue}

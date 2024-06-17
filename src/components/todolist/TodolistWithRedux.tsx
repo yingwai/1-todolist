@@ -1,23 +1,23 @@
-import React, { ChangeEvent } from 'react';
-import { FilterValueType, TodolistType } from '../../App';
-import { TaskInStateType } from '../../AppWithRedux';
-import { AddItemForm } from '../AddItemForm';
-import { EditableSpanText } from '../EditableSpanText';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Box from '@mui/material/Box';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStateType } from '../../state/store';
-import { addTaskAC, changeTaskFilterAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from '../../state/tasks-reducer';
-import { changeTitleTodolistAC, removeTodolistAC } from '../../state/todolists-reducer';
+// import React, { ChangeEvent } from 'react';
+// import { FilterValueType, TodolistType } from '../../App';
+// import { TaskInStateType } from '../../AppWithRedux';
+// import { AddItemForm } from '../AddItemForm';
+// import { EditableSpanText } from '../EditableSpanText';
+// import IconButton from '@mui/material/IconButton';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import Button from '@mui/material/Button';
+// import Checkbox from '@mui/material/Checkbox';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import Box from '@mui/material/Box';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { AppRootStateType } from '../../state/store';
+// import { addTaskAC, changeTaskFilterAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from '../../state/tasks-reducer';
+// import { changeTitleTodolistAC, removeTodolistAC } from '../../state/todolists-reducer';
 
-type TodoListPropsType = {
-    todolist: TodolistType,
-}
+// type TodoListPropsType = {
+//     todolist: TodolistType,
+// }
 
 // export const TodolistWithRedux = ({ todolist }: TodoListPropsType) => {
 //     const { id, title } = todolist

@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useEffect } from 'react';
-import { FilterValueType } from '../../App';
 import { AddItemForm } from '../AddItemForm';
 import { EditableSpanText } from '../EditableSpanText';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +10,8 @@ import { Task } from '../task/Task';
 import { useAppDisspatch } from '../../state/store';
 import { getTasksTC } from '../../state/tasks-reducer';
 import { TaskStatuses, TaskType } from '../../api/todolist-api';
-import { RequestStatusType } from '../../state/app-reducer';
+import { RequestStatusType, STATUS_CODE } from '../../state/app-reducer';
+import { FilterValueType } from '../../AppWithRedux';
 
 type TodoListPropsType = {
     todolistId: string,
@@ -62,13 +62,13 @@ export const TodolistWithThunkCreator = memo((
         <div>
             <div className='todolist-title'>
                 <h3>
-                    <EditableSpanText oldTitle={todolistTitle} updateTitleItem={fUpdateTitleTodolist} />
+                    <EditableSpanText oldTitle={todolistTitle} updateTitleItem={fUpdateTitleTodolist} disabled={entityStatus === STATUS_CODE.loading} />
                 </h3>
-                <IconButton aria-label="delete" onClick={() => removeTodolist(todolistId)} disabled={entityStatus === 'loading'}>
+                <IconButton aria-label="delete" onClick={() => removeTodolist(todolistId)} disabled={entityStatus === STATUS_CODE.loading}>
                     <DeleteIcon />
                 </IconButton>
             </div>
-            <AddItemForm addItem={fAddTaskHandler} disabled={entityStatus === 'loading'} />
+            <AddItemForm addItem={fAddTaskHandler} disabled={entityStatus === STATUS_CODE.loading} />
 
             {
                 currentTasks.length === 0 ?
@@ -76,7 +76,7 @@ export const TodolistWithThunkCreator = memo((
                     <List>
                         {currentTasks.map(task => {
                             return (
-                                <Task key={task.id} task={task} todolistId={todolistId} updateTitleTask={updateTitleTask} removeTask={removeTask} changeTaskChekedValue={changeTaskChekedValue} />
+                                <Task key={task.id} task={task} todolistId={todolistId} entityStatus={entityStatus} updateTitleTask={updateTitleTask} removeTask={removeTask} changeTaskChekedValue={changeTaskChekedValue} />
                             )
                         })}
                     </List>

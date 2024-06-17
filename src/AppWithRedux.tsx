@@ -19,7 +19,7 @@ import { addTaskTC, changeTaskFilterAC, removeTaskTC, updateTaskStatusTC, update
 import { TodolistWithThunkCreator } from './components/todolist/TodolistWithThunkCreator';
 import { TaskStatuses, TaskType } from './api/todolist-api';
 import LinearProgress from '@mui/material/LinearProgress';
-import { RequestStatusType } from './state/app-reducer';
+import { RequestStatusType, STATUS_CODE } from './state/app-reducer';
 import { ErrorSnackbar } from './components/ErrorSnackbar/ErrorSnackbar';
 
 export type TasksStateType = {
@@ -111,8 +111,12 @@ function AppWithReducer() {
                         <Switch color={'default'} onChange={changeModeHandler} />
                     </Toolbar>
                     {
-                        status === 'loading' &&
+                        status === STATUS_CODE.loading &&
                         <LinearProgress color='info' />
+                    }
+                    {
+                        status === STATUS_CODE.failed &&
+                        <LinearProgress color='error' />
                     }
                 </AppBar>
 

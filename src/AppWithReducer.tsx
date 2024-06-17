@@ -17,29 +17,29 @@
 // import { addTodolistAC, changeTitleTodolistAC, removeTodolistAC, todolistsReducer } from './state/todolists-reducer';
 // import { addTaskAC, changeTaskFilterAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer } from './state/tasks-reducer';
 
-export type TasksType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
+// export type TasksType = {
+//     id: string,
+//     title: string,
+//     isDone: boolean
+// }
 
-export type TasksStateType = {
-    [key: string]: TaskInStateType
-}
+// export type TasksStateType = {
+//     [key: string]: TaskInStateType
+// }
 
-type TaskInStateType = {
-    data: TasksType[],
-    filter: FilterValueType
-}
+// type TaskInStateType = {
+//     data: TasksType[],
+//     filter: FilterValueType
+// }
 
-export type FilterValueType = 'all' | 'active' | 'completed';
+// export type FilterValueType = 'all' | 'active' | 'completed';
 
-export type TodolistType = {
-    id: string
-    title: string
-}
+// export type TodolistType = {
+//     id: string
+//     title: string
+// }
 
-type ThemeMode = 'dark' | 'light'
+// type ThemeMode = 'dark' | 'light'
 
 // function AppWithReducer() {
 //     const [themeMode, setThemeMode] = useState<ThemeMode>('dark')

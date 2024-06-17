@@ -5,16 +5,18 @@ import { EditableSpanText } from '../EditableSpanText';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TaskStatuses, TaskType } from '../../api/todolist-api';
+import { RequestStatusType, STATUS_CODE } from '../../state/app-reducer';
 
 type TaskPropsType = {
     todolistId: string
     task: TaskType
+    entityStatus?: RequestStatusType,
     removeTask: (todolistId: string, taskId: string) => void,
     updateTitleTask: (todolistId: string, taskId: string, newTitle: string) => void
     changeTaskChekedValue: (todolistId: string, taskId: string, status: TaskStatuses) => void,
 }
 
-export const Task = memo(({ todolistId, task, removeTask, updateTitleTask, changeTaskChekedValue }: TaskPropsType) => {    
+export const Task = memo(({ todolistId, task, entityStatus, removeTask, updateTitleTask, changeTaskChekedValue }: TaskPropsType) => {    
     const fUpdateTitleTask = useCallback((taskId: string, newTitle: string) => {
         updateTitleTask(todolistId, taskId, newTitle);
     }, [todolistId, updateTitleTask])
@@ -34,10 +36,10 @@ export const Task = memo(({ todolistId, task, removeTask, updateTitleTask, chang
             sx={{ p: '0', justifyContent: 'space-between', opacity: task.status === TaskStatuses.Completed ? '0.4' : "1" }}
         >
             <div>
-                <Checkbox checked={task.status === TaskStatuses.Completed} onChange={fChangeTaskChekedValue} />
-                <EditableSpanText oldTitle={task.title} updateTitleItem={(newTitle: string) => fUpdateTitleTask(task.id, newTitle)} />
+                <Checkbox checked={task.status === TaskStatuses.Completed} onChange={fChangeTaskChekedValue} disabled={entityStatus === STATUS_CODE.loading} />
+                <EditableSpanText oldTitle={task.title} updateTitleItem={(newTitle: string) => fUpdateTitleTask(task.id, newTitle)} disabled={entityStatus === STATUS_CODE.loading} />
             </div>
-            <IconButton aria-label="delete" onClick={fRemoveTaskHandler}>
+            <IconButton aria-label="delete" onClick={fRemoveTaskHandler} disabled={entityStatus === STATUS_CODE.loading}>
                 <DeleteIcon />
             </IconButton>
         </ListItem>

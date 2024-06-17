@@ -15,27 +15,27 @@
 // import CssBaseline from '@mui/material/CssBaseline';
 // import Switch from '@mui/material/Switch';
 
-export type TasksType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
+// export type TasksType = {
+//     id: string,
+//     title: string,
+//     isDone: boolean
+// }
 
-export type TasksStateType = {
-    [key: string]: TaskInStateType
-}
+// export type TasksStateType = {
+//     [key: string]: TaskInStateType
+// }
 
-export type TaskInStateType = {
-    data: TasksType[],
-    filter: FilterValueType
-}
+// export type TaskInStateType = {
+//     data: TasksType[],
+//     filter: FilterValueType
+// }
 
-export type FilterValueType = 'all' | 'active' | 'completed';
+// export type FilterValueType = 'all' | 'active' | 'completed';
 
-export type TodolistType = {
-    id: string
-    title: string
-}
+// export type TodolistType = {
+//     id: string
+//     title: string
+// }
 
 // type ThemeMode = 'dark' | 'light'
 

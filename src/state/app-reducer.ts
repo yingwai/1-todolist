@@ -5,6 +5,13 @@ const initialState = {
     error: null
 }
 
+export enum STATUS_CODE {
+    idle = 'idle',
+    loading = 'loading',
+    succeeded = 'succeeded',
+    failed = 'failed'
+}
+
 type InitialStateType = {
     status: RequestStatusType
     error: null | string

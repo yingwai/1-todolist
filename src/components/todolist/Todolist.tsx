@@ -1,28 +1,28 @@
-import React, { memo, useCallback } from 'react';
-import { FilterValueType } from '../../App';
-import { AddItemForm } from '../AddItemForm';
-import { EditableSpanText } from '../EditableSpanText';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Box from '@mui/material/Box';
-import { Task } from '../task/Task';
-import { TasksType } from '../../App';
+// import React, { memo, useCallback } from 'react';
+// import { FilterValueType } from '../../App';
+// import { AddItemForm } from '../AddItemForm';
+// import { EditableSpanText } from '../EditableSpanText';
+// import IconButton from '@mui/material/IconButton';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import Button from '@mui/material/Button';
+// import List from '@mui/material/List';
+// import Box from '@mui/material/Box';
+// import { Task } from '../task/Task';
+// import { TasksType } from '../../App';
 
-type TodoListPropsType = {
-    todolistId: string,
-    todolistTitle: string,
-    tasks: TasksType[],
-    filter: FilterValueType,
-    removeTodolist: (todolistId: string) => void,
-    updateTitleTodolist: (todolistId: string, newTitle: string) => void
-    addTask: (todolistId: string, taskTitle: string) => void,
-    removeTask: (todolistId: string, taskId: string) => void,
-    updateTitleTask: (todolistId: string, taskId: string, newTitle: string) => void
-    changeTaskChekedValue: (todolistId: string, taskId: string, taskValue: boolean) => void,
-    changeFilterValue: (todolistId: string, value: FilterValueType) => void,
-}
+// type TodoListPropsType = {
+//     todolistId: string,
+//     todolistTitle: string,
+//     tasks: TasksType[],
+//     filter: FilterValueType,
+//     removeTodolist: (todolistId: string) => void,
+//     updateTitleTodolist: (todolistId: string, newTitle: string) => void
+//     addTask: (todolistId: string, taskTitle: string) => void,
+//     removeTask: (todolistId: string, taskId: string) => void,
+//     updateTitleTask: (todolistId: string, taskId: string, newTitle: string) => void
+//     changeTaskChekedValue: (todolistId: string, taskId: string, taskValue: boolean) => void,
+//     changeFilterValue: (todolistId: string, value: FilterValueType) => void,
+// }
 
 // export const Todolist = memo((
 //     { todolistId, todolistTitle, tasks, filter, removeTodolist, updateTitleTodolist, addTask, removeTask, updateTitleTask, changeTaskChekedValue, changeFilterValue }: TodoListPropsType
