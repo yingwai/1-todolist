@@ -5,10 +5,11 @@ import AddBoxIcon from '@mui/icons-material/AddBox'
 import Box from '@mui/material/Box';
 
 type ItemProps = {
+    disabled?: boolean,
     addItem: (taskTitle: string) => void,
 }
 
-export const AddItemForm = memo(({ addItem }: ItemProps) => {    
+export const AddItemForm = memo(({ addItem, disabled }: ItemProps) => {
     let [errorInput, setErrorInput] = useState<string | null>(null);
 
     let [taskTitle, setTaskTitle] = useState<string>('');
@@ -44,7 +45,7 @@ export const AddItemForm = memo(({ addItem }: ItemProps) => {
                 <IconButton
                     color={'primary'}
                     onClick={() => fItemHandler()}
-                    disabled={taskTitle.length < nMinLimitValueTitle}
+                    disabled={taskTitle.length < nMinLimitValueTitle || disabled}
                 >
                     <AddBoxIcon />
                 </IconButton>

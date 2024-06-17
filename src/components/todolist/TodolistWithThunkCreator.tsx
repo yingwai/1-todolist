@@ -11,12 +11,14 @@ import { Task } from '../task/Task';
 import { useAppDisspatch } from '../../state/store';
 import { getTasksTC } from '../../state/tasks-reducer';
 import { TaskStatuses, TaskType } from '../../api/todolist-api';
+import { RequestStatusType } from '../../state/app-reducer';
 
 type TodoListPropsType = {
     todolistId: string,
     todolistTitle: string,
     tasks: TaskType[],
     filter: FilterValueType,
+    entityStatus?: RequestStatusType,
     removeTodolist: (todolistId: string) => void,
     updateTitleTodolist: (todolistId: string, newTitle: string) => void
     addTask: (todolistId: string, taskTitle: string) => void,
@@ -27,7 +29,7 @@ type TodoListPropsType = {
 }
 
 export const TodolistWithThunkCreator = memo((
-    { todolistId, todolistTitle, tasks, filter, removeTodolist, updateTitleTodolist, addTask, removeTask, updateTitleTask, changeTaskChekedValue, changeFilterValue }: TodoListPropsType
+    { todolistId, todolistTitle, tasks, filter, entityStatus, removeTodolist, updateTitleTodolist, addTask, removeTask, updateTitleTask, changeTaskChekedValue, changeFilterValue }: TodoListPropsType
 ) => {
     const dispatch = useAppDisspatch();
 
@@ -62,11 +64,11 @@ export const TodolistWithThunkCreator = memo((
                 <h3>
                     <EditableSpanText oldTitle={todolistTitle} updateTitleItem={fUpdateTitleTodolist} />
                 </h3>
-                <IconButton aria-label="delete" onClick={() => removeTodolist(todolistId)}>
+                <IconButton aria-label="delete" onClick={() => removeTodolist(todolistId)} disabled={entityStatus === 'loading'}>
                     <DeleteIcon />
                 </IconButton>
             </div>
-            <AddItemForm addItem={fAddTaskHandler} />
+            <AddItemForm addItem={fAddTaskHandler} disabled={entityStatus === 'loading'} />
 
             {
                 currentTasks.length === 0 ?

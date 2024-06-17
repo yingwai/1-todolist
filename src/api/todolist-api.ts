@@ -44,7 +44,7 @@ type TaskResponseType = {
     totalCount: number
 }
 
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     resultCode: number
     messages: string[]
     fieldsErrors: FieldErrorType[]

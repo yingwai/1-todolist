@@ -18,6 +18,9 @@ import { AppRootStateType, useAppDisspatch } from './state/store';
 import { addTaskTC, changeTaskFilterAC, removeTaskTC, updateTaskStatusTC, updateTaskTitleTC } from './state/tasks-reducer';
 import { TodolistWithThunkCreator } from './components/todolist/TodolistWithThunkCreator';
 import { TaskStatuses, TaskType } from './api/todolist-api';
+import LinearProgress from '@mui/material/LinearProgress';
+import { RequestStatusType } from './state/app-reducer';
+import { ErrorSnackbar } from './components/ErrorSnackbar/ErrorSnackbar';
 
 export type TasksStateType = {
     [key: string]: TaskInStateType
@@ -25,7 +28,8 @@ export type TasksStateType = {
 
 export type TaskInStateType = {
     data: TaskType[],
-    filter: FilterValueType
+    filter: FilterValueType,
+    entityStatus: RequestStatusType
 }
 
 export type FilterValueType = 'all' | 'active' | 'completed';
@@ -52,6 +56,7 @@ function AppWithReducer() {
 
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks);
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
     const dispatch = useAppDisspatch()
 
     useEffect(() => {
@@ -93,6 +98,7 @@ function AppWithReducer() {
     return (
         <div>
             <ThemeProvider theme={theme}>
+                <ErrorSnackbar />
                 <CssBaseline />
                 <AppBar position="static">
                     <Toolbar variant="dense">
@@ -104,6 +110,10 @@ function AppWithReducer() {
                         </Typography>
                         <Switch color={'default'} onChange={changeModeHandler} />
                     </Toolbar>
+                    {
+                        status === 'loading' &&
+                        <LinearProgress color='info' />
+                    }
                 </AppBar>
 
                 <Container fixed>
@@ -123,6 +133,7 @@ function AppWithReducer() {
                                             todolistTitle={tl.title}
                                             tasks={tasks[tl.id].data}
                                             filter={tasks[tl.id].filter}
+                                            entityStatus={tasks[tl.id].entityStatus}
                                             removeTodolist={fRemoveTodolist}
                                             addTask={fAddTask}
                                             removeTask={fRemoveTask}
