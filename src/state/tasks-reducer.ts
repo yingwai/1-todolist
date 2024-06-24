@@ -1,10 +1,10 @@
 import { AddTodolistActionType, changeTodolistEntityStatusAC, RemoveTodolistActionType, SetTodolistActionType } from './todolists-reducer';
 import { TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType } from '../api/todolist-api';
 import { Dispatch } from 'redux';
-import { FilterValueType, TasksStateType } from '../AppWithRedux';
 import { AppRootStateType } from './store';
 import { setAppStatusAC, STATUS_CODE } from './app-reducer';
 import { handleServerAppError, handleServerNetworkError } from '../utils/error-utils';
+import { FilterValueType, TasksStateType } from '../pages/Todolist/Todolist';
 
 
 export type AddTaskActionType = ReturnType<typeof addTaskAC>
@@ -106,12 +106,10 @@ export const getTasksTC = (todolistId: string) => {
     }
 }
 export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC(STATUS_CODE.loading))
     todolistAPI.createTask(todolistId, title)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(addTaskAC(res.data.data.item))
-                dispatch(setAppStatusAC(STATUS_CODE.succeeded))
             } else {
                 handleServerAppError(dispatch, res.data)
             }
@@ -122,13 +120,11 @@ export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispa
 }
 
 export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC(STATUS_CODE.loading))
     dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading))
     todolistAPI.deleteTask(todolistId, taskId)
         .then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(removeTaskAC(todolistId, taskId))
-                dispatch(setAppStatusAC(STATUS_CODE.succeeded))
                 dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle))
             } else {
                 handleServerAppError(dispatch, res.data)
@@ -141,7 +137,6 @@ export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: D
 
 export const updateTaskTitleTC = (todolistId: string, taskId: string, title: string) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
-        dispatch(setAppStatusAC(STATUS_CODE.loading))
         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading))
         const tasks = getState().tasks;
         const task = tasks[todolistId].data.find(t => t.id === taskId)
@@ -160,7 +155,6 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
                 .then(res => {
                     if (res.data.resultCode === 0) {
                         dispatch(changeTaskTitleAC(todolistId, taskId, title))
-                        dispatch(setAppStatusAC(STATUS_CODE.succeeded))
                         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle))
                     } else {
                         handleServerAppError(dispatch, res.data)
@@ -175,7 +169,6 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
 
 export const updateTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
-        dispatch(setAppStatusAC(STATUS_CODE.loading))
         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading))
         const tasks = getState().tasks;
         const task = tasks[todolistId].data.find(t => t.id === taskId)
@@ -194,7 +187,6 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
                 .then(res => {
                     if (res.data.resultCode === 0) {
                         dispatch(changeTaskStatusAC(todolistId, taskId, status))
-                        dispatch(setAppStatusAC(STATUS_CODE.succeeded))
                         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle))
                     } else {
                         handleServerAppError(dispatch, res.data)

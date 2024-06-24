@@ -1,17 +1,17 @@
 import React, { memo, useCallback, useEffect } from 'react';
-import { AddItemForm } from '../AddItemForm';
-import { EditableSpanText } from '../EditableSpanText';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
-import { Task } from '../task/Task';
 import { useAppDisspatch } from '../../state/store';
 import { getTasksTC } from '../../state/tasks-reducer';
 import { TaskStatuses, TaskType } from '../../api/todolist-api';
 import { RequestStatusType, STATUS_CODE } from '../../state/app-reducer';
-import { FilterValueType } from '../../AppWithRedux';
+import { EditableSpanText } from '../EditableSpanText';
+import { AddItemForm } from '../AddItemForm';
+import { Task } from '../Task/Task';
+import { FilterValueType } from '../../pages/Todolist/Todolist';
 
 type TodoListPropsType = {
     todolistId: string,

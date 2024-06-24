@@ -2,7 +2,7 @@ import { Dispatch } from 'redux'
 import { todolistAPI } from '../api/todolist-api'
 import { RequestStatusType, setAppStatusAC, STATUS_CODE } from './app-reducer'
 import { handleServerAppError, handleServerNetworkError } from '../utils/error-utils'
-import { TodolistType } from '../AppWithRedux'
+import { TodolistType } from '../pages/Todolist/Todolist'
 
 
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
@@ -70,6 +70,7 @@ export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusTy
 
 export const getTodolistsTC = () => {
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC(STATUS_CODE.loading))
         todolistAPI.getTodolists()
             .then(res => {
                 dispatch(setTodolistsAC(res.data))
@@ -83,12 +84,10 @@ export const getTodolistsTC = () => {
 
 export const createTodolistsTC = (title: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(setAppStatusAC(STATUS_CODE.loading))
         todolistAPI.createTodolist(title)
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(addTodolistAC(res.data.data.item))
-                    dispatch(setAppStatusAC(STATUS_CODE.succeeded))
                 } else {
                     handleServerAppError(dispatch, res.data)
                 }
@@ -101,13 +100,11 @@ export const createTodolistsTC = (title: string) => {
 
 export const deleteTodolistsTC = (todolistId: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(setAppStatusAC(STATUS_CODE.loading))
         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading))
         todolistAPI.deleteTodolist(todolistId)
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(removeTodolistAC(todolistId))
-                    dispatch(setAppStatusAC(STATUS_CODE.succeeded))
                 } else {
                     handleServerAppError(dispatch, res.data)
                 }
@@ -120,13 +117,11 @@ export const deleteTodolistsTC = (todolistId: string) => {
 
 export const updateTodolistsTC = (todolistId: string, title: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(setAppStatusAC(STATUS_CODE.loading))
         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading))
         todolistAPI.changeTitleTodolist(todolistId, title)
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(changeTitleTodolistAC(todolistId, title))
-                    dispatch(setAppStatusAC(STATUS_CODE.succeeded))
                     dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle))
                 } else {
                     handleServerAppError(dispatch, res.data)
