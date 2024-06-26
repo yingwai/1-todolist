@@ -23,8 +23,9 @@ import Grid from '@mui/material/Grid';
 type ThemeMode = 'dark' | 'light'
 
 function AppWithReducer() {
-    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
     const isInitialized = useSelector((state: AppRootStateType) => state.app.isInitialized);
+    const status = useSelector((state: AppRootStateType) => state.app.status);
+    const isLoggedIn = useSelector((state: AppRootStateType) => state.auth.isLoggedIn);
     const [themeMode, setThemeMode] = useState<ThemeMode>('dark')
     const dispatch = useAppDisspatch();
 
@@ -68,13 +69,16 @@ function AppWithReducer() {
                                 <Switch color={'default'} onChange={changeModeHandler} />
                             </Grid>
 
-                            <Button
-                                variant={'contained'}
-                                color={'inherit'}
-                                onClick={() => dispatch(logoutTC())}
-                            >
-                                Logout
-                            </Button>
+                            {
+                                isLoggedIn &&
+                                <Button
+                                    variant={'contained'}
+                                    color={'inherit'}
+                                    onClick={() => dispatch(logoutTC())}
+                                >
+                                    Logout
+                                </Button>
+                            }
                         </Grid>
                     </Toolbar>
                     {
