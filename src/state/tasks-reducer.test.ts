@@ -65,7 +65,6 @@
 
 //     const endState = tasksReducer(startState, action)
 
-
 //     const keys = Object.keys(endState)
 //     const newKey = keys.find(k => k !== todolistID1 && k !== todolistID2)
 //     if (!newKey) {

@@ -45,7 +45,7 @@
 //     const action = removeTodolistAC(todolistID2)
 
 //     const endState = tasksReducer(startState, action)
-    
+
 //     const keys = Object.keys(endState)
 
 //     expect(keys.length).toBe(1)

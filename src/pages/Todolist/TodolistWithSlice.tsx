@@ -6,16 +6,12 @@ import { TodolistWithThunkCreator } from "../../components/Todolist/TodolistWith
 import { TaskStatuses, TaskType } from "../../api/todolist-api";
 import { RequestStatusType } from "../../state/app-reducer";
 import { useSelector } from "react-redux";
-import { AppRootStateType, useAppDisspatch } from "../../state/store";
-import { createTodolistsTC, deleteTodolistsTC, getTodolistsTC, updateTodolistsTC } from "../../state/todolists-reducer";
-import {
-    addTaskTC,
-    changeTaskFilterAC,
-    removeTaskTC,
-    updateTaskStatusTC,
-    updateTaskTitleTC,
-} from "../../state/tasks-reducer";
+import { useAppDisspatch } from "../../state/store";
 import { Navigate } from "react-router-dom";
+import { createTodolistsTC, deleteTodolistsTC, getTodolistsTC, selectTodolists, updateTodolistsTC } from "state/todolistsSlice";
+import { selectorAuthIsLoggedIn } from "pages/Login/authSlice";
+import { addTaskTC, removeTaskTC, selectorTasks, tasksActions, updateTaskStatusTC, updateTaskTitleTC } from "state/tasksSlice";
+import { changeTaskFilterAC } from "state/tasks-reducer";
 
 export type TodolistType = {
     id: string;
@@ -34,17 +30,17 @@ export type TaskInStateType = {
 
 export type FilterValueType = "all" | "active" | "completed";
 
-const Todolist = () => {
-    const isLoggedIn = useSelector((state: AppRootStateType) => state.auth.isLoggedIn);
-    const todolists = useSelector<AppRootStateType, TodolistType[]>((state) => state.todolists);
-    const tasks = useSelector<AppRootStateType, TasksStateType>((state) => state.tasks);
+const TodolistWithSlice = () => {
+    const isLoggedIn = useSelector(selectorAuthIsLoggedIn);
+    const todolists = useSelector(selectTodolists);
+    const tasks = useSelector(selectorTasks);
     const dispatch = useAppDisspatch();
 
     useEffect(() => {
         if (!isLoggedIn) {
             return;
         }
-        
+
         dispatch(getTodolistsTC());
     }, [dispatch, isLoggedIn]);
 
@@ -99,7 +95,7 @@ const Todolist = () => {
 
     const fChangeFilterValue = useCallback(
         (todolistId: string, value: FilterValueType) => {
-            dispatch(changeTaskFilterAC(todolistId, value));
+            dispatch(tasksActions.changeTaskFilter({ todolistId, filter: value }))
         },
         [dispatch],
     );
@@ -115,7 +111,7 @@ const Todolist = () => {
             </Grid>
 
             <Grid container spacing={4}>
-                {todolists.map((tl) => {
+                {todolists?.map((tl) => {
                     return (
                         <Grid item key={tl.id}>
                             <Paper elevation={4} sx={{ p: "0 15px 15px 15px" }}>
@@ -143,4 +139,4 @@ const Todolist = () => {
     );
 };
 
-export default Todolist;
+export default TodolistWithSlice;

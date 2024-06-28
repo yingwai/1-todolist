@@ -10,24 +10,26 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Switch from "@mui/material/Switch";
 import { useSelector } from "react-redux";
-import { AppRootStateType, useAppDisspatch } from "./state/store";
+import { useAppDisspatch } from "./state/store";
 import LinearProgress from "@mui/material/LinearProgress";
 import { STATUS_CODE } from "./state/app-reducer";
 import { ErrorSnackbar } from "./components/ErrorSnackbar/ErrorSnackbar";
 import { Outlet } from "react-router-dom";
-import { logoutTC, meTC } from "./pages/Login/auth-reducer";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import { logoutTC, meTC, selectorAuthIsLoggedIn } from "pages/Login/authSlice";
+import { selectorAppInitialized, selectorAppStatus } from "state/appSlice";
 
 type ThemeMode = "dark" | "light";
 
-function AppWithReducer() {
-    const isInitialized = useSelector((state: AppRootStateType) => state.app.isInitialized);
-    const status = useSelector((state: AppRootStateType) => state.app.status);
-    const isLoggedIn = useSelector((state: AppRootStateType) => state.auth.isLoggedIn);
-    const [themeMode, setThemeMode] = useState<ThemeMode>("dark");
+function AppWithSlice() {
+    const isInitialized = useSelector(selectorAppInitialized)
+    const status = useSelector(selectorAppStatus);
+    const isLoggedIn = useSelector(selectorAuthIsLoggedIn);
     const dispatch = useAppDisspatch();
+
+    const [themeMode, setThemeMode] = useState<ThemeMode>("dark");
 
     useEffect(() => {
         dispatch(meTC());
@@ -42,7 +44,7 @@ function AppWithReducer() {
     const changeModeHandler = () => {
         setThemeMode(themeMode === "light" ? "dark" : "light");
     };
-
+    
     if (!isInitialized) {
         return (
             <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
@@ -94,4 +96,4 @@ function AppWithReducer() {
     );
 }
 
-export default AppWithReducer;
+export default AppWithSlice;

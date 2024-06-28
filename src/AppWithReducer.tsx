@@ -80,7 +80,6 @@
 //         // },
 //     })
 
-
 //     function fAddTodolist(tdlTitle: string) {
 //         // const action = addTodolistAC(tdlTitle);
 //         // dispatchToTodolists(action);
@@ -141,7 +140,7 @@
 //                     <Grid container spacing={4}>
 //                         {todolists.map((tl) => {
 //                             // console.log(tasks[tl.id].data);
-                            
+
 //                             return (
 //                                 <Grid item
 //                                     key={tl.id}>
