@@ -4,18 +4,16 @@ import { AppRootStateType } from "./store";
 import { RequestStatusType, STATUS_CODE } from "./app-reducer";
 import { handleServerAppError, handleServerNetworkError } from "../utils/error-utils";
 import { FilterValueType, TasksStateType } from "../pages/Todolist/Todolist";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { todolistsActions } from "./todolistsSlice";
 import { appActions } from "./appSlice";
 import { authActions } from "pages/Login/authSlice";
+import { createAppAsyncThunk } from "utils/create-app-async-thunk";
 
 const slice = createSlice({
     name: "tasks",
     initialState: {} as TasksStateType,
     reducers: {
-        setTasks: (state, action: PayloadAction<{ todolistId: string, tasks: TaskType[] }>) => {
-            state[action.payload.todolistId].data = action.payload.tasks;
-        },
         addTask: (state, action: PayloadAction<{ task: TaskType }>) => {
             state[action.payload.task.todoListId].data.unshift(action.payload.task)
         },
@@ -36,7 +34,7 @@ const slice = createSlice({
             if (index !== -1) tasks[index].title = action.payload.newTitle
 
         },
-        changeTaskFilter: (state, action: PayloadAction<{ todolistId: string, filter: FilterValueType }>) => {            
+        changeTaskFilter: (state, action: PayloadAction<{ todolistId: string, filter: FilterValueType }>) => {
             state[action.payload.todolistId].filter = action.payload.filter
         },
         changeTodolistEntityStatus: (state, action: PayloadAction<{ id: string, status: RequestStatusType }>) => {
@@ -65,7 +63,10 @@ const slice = createSlice({
                 delete state[action.payload.id]
             })
             .addCase(authActions.setIsLoggedIn, (state, action) => {
-                return {};
+                if (!action.payload.isLoggedIn) return {};
+            })
+            .addCase(getTask.fulfilled, (state, action) => {
+                state[action.payload.todolistId].data = action.payload.tasks;
             })
     },
     selectors: {
@@ -75,24 +76,39 @@ const slice = createSlice({
 
 // Thunk
 
-export const getTasksTC = (todolistId: string) => {
-    return (dispatch: Dispatch) => {
-        dispatch(appActions.setAppStatus({ status: STATUS_CODE.loading }))
-        todolistAPI
-            .getTasks(todolistId)
-            .then((res) => {
-                if (res.data.error === null) {
-                    dispatch(tasksActions.setTasks({ todolistId, tasks: res.data.items }))
-                    dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }))
-                } else {
-                    handleServerAppError(dispatch, res.data.error);
-                }
-            })
-            .catch((error) => {
-                handleServerNetworkError(dispatch, error);
-            });
-    };
-};
+export const getTask = createAppAsyncThunk<
+    { tasks: TaskType[], todolistId: string },
+    string
+>(
+    `${slice.name}/getTasks`,
+    async (todolistId: string, thunkAPI) => {
+        const { dispatch, rejectWithValue } = thunkAPI;
+
+        try {
+            dispatch(appActions.setAppStatus({ status: STATUS_CODE.loading }))
+            const res = await todolistAPI.getTasks(todolistId)
+
+            if (res.data.error === null) {
+                dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }))
+                return { todolistId, tasks: res.data.items }
+            } else {
+                handleServerAppError(dispatch, res.data.error)
+                return rejectWithValue(null)
+            }
+
+        } catch (error: any) {
+            handleServerNetworkError(dispatch, error)
+            return rejectWithValue(null)
+        }
+    }
+)
+
+export const AddTask = createAppAsyncThunk(
+    `${slice.name}`,
+    async () => {
+        
+    }
+)
 export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     todolistAPI
         .createTask(todolistId, title)
@@ -193,4 +209,5 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
 
 export const tasksReducer = slice.reducer;
 export const tasksActions = slice.actions;
+export const tasksThunk = { getTask }
 export const { selectorTasks } = slice.selectors

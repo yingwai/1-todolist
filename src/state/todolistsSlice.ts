@@ -32,7 +32,7 @@ const slice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(authActions.setIsLoggedIn, (state, action) => {
-                return []
+                if (!action.payload.isLoggedIn) return []
             })
     },
     selectors: {

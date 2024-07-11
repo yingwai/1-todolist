@@ -11,7 +11,7 @@ import { EditableSpanText } from "../EditableSpanText";
 import { AddItemForm } from "../AddItemForm";
 import { Task } from "../Task/Task";
 import { FilterValueType } from "pages/Todolist/Todolist";
-import { getTasksTC } from "state/tasksSlice";
+import { getTask, getTasksTC } from "state/tasksSlice";
 
 type TodoListPropsType = {
     todolistId: string;
@@ -46,7 +46,8 @@ export const TodolistWithThunkCreator = memo(
         const dispatch = useAppDisspatch();
 
         useEffect(() => {
-            dispatch(getTasksTC(todolistId));
+            // dispatch(getTasksTC(todolistId));
+            dispatch(getTask(todolistId))
         }, [dispatch, todolistId]);
 
         let currentTasks = tasks;

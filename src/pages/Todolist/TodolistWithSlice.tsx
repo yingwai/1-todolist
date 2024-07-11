@@ -11,7 +11,6 @@ import { Navigate } from "react-router-dom";
 import { createTodolistsTC, deleteTodolistsTC, getTodolistsTC, selectTodolists, updateTodolistsTC } from "state/todolistsSlice";
 import { selectorAuthIsLoggedIn } from "pages/Login/authSlice";
 import { addTaskTC, removeTaskTC, selectorTasks, tasksActions, updateTaskStatusTC, updateTaskTitleTC } from "state/tasksSlice";
-import { changeTaskFilterAC } from "state/tasks-reducer";
 
 export type TodolistType = {
     id: string;
