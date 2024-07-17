@@ -11,7 +11,7 @@ import { EditableSpanText } from "../EditableSpanText";
 import { AddItemForm } from "../AddItemForm";
 import { Task } from "../Task/Task";
 import { FilterValueType } from "pages/Todolist/Todolist";
-import { getTask, getTasksTC } from "state/tasksSlice";
+import { getTask } from "state/tasksSlice";
 
 type TodoListPropsType = {
     todolistId: string;

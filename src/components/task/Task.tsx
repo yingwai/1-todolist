@@ -30,7 +30,7 @@ export const Task = memo(
         }
 
         function fChangeTaskChekedValue(e: ChangeEvent<HTMLInputElement>) {
-            const value = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New;
+            const value = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.InProgress;
 
             changeTaskChekedValue(todolistId, task.id, value);
         }

@@ -63,6 +63,12 @@ export enum TaskStatuses {
     Draft = 3,
 }
 
+export const ResultCode = {
+    success: 0,
+    error: 1,
+    captcha: 10
+  } as const
+
 export const todolistAPI = {
     getTodolists() {
         return instance.get<TodolistType[]>("/todo-lists");
@@ -73,20 +79,20 @@ export const todolistAPI = {
     deleteTodolist(todolistId: string) {
         return instance.delete<ResponseType<{ item: TodolistType }>>(`/todo-lists/${todolistId}`);
     },
-    changeTitleTodolist(todolistId: string, title: string) {
+    changeTitleTodolist({todolistId, title}: {todolistId: string, title: string}) {
         return instance.put<ResponseType<{ item: TodolistType }>>(`/todo-lists/${todolistId}`, { title });
     },
 
     getTasks(todolistId: string) {
         return instance.get<TaskResponseType>(`/todo-lists/${todolistId}/tasks`);
     },
-    createTask(todolistId: string, title: string) {
+    createTask({ todolistId, title }: { todolistId: string, title: string }) {
         return instance.post<ResponseType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, { title });
     },
-    deleteTask(todolistId: string, taskId: string) {
+    deleteTask({ todolistId, taskId }: { todolistId: string, taskId: string }) {
         return instance.delete<ResponseType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`);
     },
-    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+    updateTask({ todolistId, taskId, model }: { todolistId: string, taskId: string, model: UpdateTaskModelType }) {
         return instance.put<ResponseType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model);
     },
 };

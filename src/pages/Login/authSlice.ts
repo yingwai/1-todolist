@@ -2,11 +2,12 @@ import { Dispatch } from "redux";
 import {
     STATUS_CODE,
 } from "../../state/app-reducer";
-import { authAPI } from "../../api/todolist-api";
-import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+import { authAPI, ResultCode } from "../../api/todolist-api";
+import { handleServerAppError } from "../../utils/handle-server-app-error";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { appActions } from "state/appSlice";
 import { AppThunk } from "state/store";
+import { handleServerNetworkError } from "utils/handle-server-network-error";
 
 const slice = createSlice({
     name: "auth",
@@ -28,7 +29,7 @@ export const meTC = (): AppThunk => (dispatch) => {
     authAPI
         .me()
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
             } else {
                 console.log(res.data);
@@ -47,7 +48,7 @@ export const loginTC = (data: any): AppThunk => (dispatch) => {
     authAPI
         .login(data)
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
                 dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }))
             } else {
@@ -64,7 +65,7 @@ export const logoutTC = (): AppThunk => (dispatch: Dispatch) => {
     authAPI
         .logout()
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }));
                 dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }))
             } else {

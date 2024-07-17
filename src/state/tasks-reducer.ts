@@ -4,12 +4,12 @@ import {
     RemoveTodolistActionType,
     SetTodolistActionType,
 } from "./todolists-reducer";
-import { TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType } from "../api/todolist-api";
+import { ResultCode, TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType } from "../api/todolist-api";
 import { Dispatch } from "redux";
 import { AppRootStateType } from "./store";
 import { setAppStatusAC, STATUS_CODE } from "./app-reducer";
-import { handleServerAppError, handleServerNetworkError } from "../utils/error-utils";
 import { FilterValueType, TasksStateType } from "../pages/Todolist/Todolist";
+import { handleServerAppError, handleServerNetworkError } from "utils";
 
 export type AddTaskActionType = ReturnType<typeof addTaskAC>;
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
@@ -152,9 +152,9 @@ export const getTasksTC = (todolistId: string) => {
 };
 export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     todolistAPI
-        .createTask(todolistId, title)
+        .createTask({ todolistId, title })
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(addTaskAC(res.data.data.item));
             } else {
                 handleServerAppError(dispatch, res.data);
@@ -168,9 +168,9 @@ export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispa
 export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
     dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading));
     todolistAPI
-        .deleteTask(todolistId, taskId)
+        .deleteTask({ todolistId, taskId })
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(removeTaskAC(todolistId, taskId));
                 dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle));
             } else {
@@ -199,9 +199,9 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
             };
 
             todolistAPI
-                .updateTask(todolistId, taskId, model)
+                .updateTask({ todolistId, taskId, model })
                 .then((res) => {
-                    if (res.data.resultCode === 0) {
+                    if (res.data.resultCode === ResultCode.success) {
                         dispatch(changeTaskTitleAC(todolistId, taskId, title));
                         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle));
                     } else {
@@ -232,9 +232,9 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
             };
 
             todolistAPI
-                .updateTask(todolistId, taskId, model)
+                .updateTask({ todolistId, taskId, model })
                 .then((res) => {
-                    if (res.data.resultCode === 0) {
+                    if (res.data.resultCode === ResultCode.success) {
                         dispatch(changeTaskStatusAC(todolistId, taskId, status));
                         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle));
                     } else {

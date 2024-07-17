@@ -6,8 +6,9 @@ import {
     SetAppStatusActionType,
     STATUS_CODE,
 } from "../../state/app-reducer";
-import { authAPI } from "../../api/todolist-api";
-import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils";
+import { authAPI, ResultCode } from "../../api/todolist-api";
+import { handleServerAppError } from "../../utils/handle-server-app-error";
+import { handleServerNetworkError } from "utils/handle-server-network-error";
 
 const initialState = {
     isLoggedIn: false,
@@ -31,7 +32,7 @@ export const meTC = () => (dispatch: Dispatch) => {
     authAPI
         .me()
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(setIsLoggedInAC(true));
             } else {
                 console.log(res.data);
@@ -50,7 +51,7 @@ export const loginTC = (data: any) => (dispatch: Dispatch<ActionsType>) => {
     authAPI
         .login(data)
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(setIsLoggedInAC(true));
                 dispatch(setAppStatusAC(STATUS_CODE.succeeded));
             } else {
@@ -67,7 +68,7 @@ export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
     authAPI
         .logout()
         .then((res) => {
-            if (res.data.resultCode === 0) {
+            if (res.data.resultCode === ResultCode.success) {
                 dispatch(setIsLoggedInAC(false));
                 dispatch(setAppStatusAC(STATUS_CODE.succeeded));
             } else {

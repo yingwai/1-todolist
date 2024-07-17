@@ -1,8 +1,8 @@
 import { Dispatch } from "redux";
-import { todolistAPI } from "../api/todolist-api";
+import { ResultCode, todolistAPI } from "../api/todolist-api";
 import { RequestStatusType, setAppStatusAC, STATUS_CODE } from "./app-reducer";
-import { handleServerAppError, handleServerNetworkError } from "../utils/error-utils";
 import { TodolistType } from "../pages/Todolist/Todolist";
+import { handleServerAppError, handleServerNetworkError } from "utils";
 
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>;
 
@@ -66,7 +66,7 @@ export const changeTodolistEntityStatusAC = (id: string, status: RequestStatusTy
 
 // Thunk
 
-export const getTodolistsTC = () => {    
+export const getTodolistsTC = () => {
     return (dispatch: Dispatch) => {
         dispatch(setAppStatusAC(STATUS_CODE.loading));
         todolistAPI
@@ -86,7 +86,7 @@ export const createTodolistsTC = (title: string) => {
         todolistAPI
             .createTodolist(title)
             .then((res) => {
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode === ResultCode.success) {
                     dispatch(addTodolistAC(res.data.data.item));
                 } else {
                     handleServerAppError(dispatch, res.data);
@@ -104,7 +104,7 @@ export const deleteTodolistsTC = (todolistId: string) => {
         todolistAPI
             .deleteTodolist(todolistId)
             .then((res) => {
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode === ResultCode.success) {
                     dispatch(removeTodolistAC(todolistId));
                 } else {
                     handleServerAppError(dispatch, res.data);
@@ -120,9 +120,9 @@ export const updateTodolistsTC = (todolistId: string, title: string) => {
     return (dispatch: Dispatch) => {
         dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.loading));
         todolistAPI
-            .changeTitleTodolist(todolistId, title)
+            .changeTitleTodolist({ todolistId, title })
             .then((res) => {
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode === ResultCode.success) {
                     dispatch(changeTitleTodolistAC(todolistId, title));
                     dispatch(changeTodolistEntityStatusAC(todolistId, STATUS_CODE.idle));
                 } else {

@@ -8,9 +8,9 @@ import { RequestStatusType } from "../../state/app-reducer";
 import { useSelector } from "react-redux";
 import { useAppDisspatch } from "../../state/store";
 import { Navigate } from "react-router-dom";
-import { createTodolistsTC, deleteTodolistsTC, getTodolistsTC, selectTodolists, updateTodolistsTC } from "state/todolistsSlice";
+import { createTodolists, deleteTodolists, getTodolists, selectTodolists, updateTodolists } from "state/todolistsSlice";
 import { selectorAuthIsLoggedIn } from "pages/Login/authSlice";
-import { addTaskTC, removeTaskTC, selectorTasks, tasksActions, updateTaskStatusTC, updateTaskTitleTC } from "state/tasksSlice";
+import { addTask, removeTask, selectorTasks, tasksActions, updateTask } from "state/tasksSlice";
 
 export type TodolistType = {
     id: string;
@@ -40,54 +40,54 @@ const TodolistWithSlice = () => {
             return;
         }
 
-        dispatch(getTodolistsTC());
+        dispatch(getTodolists());
     }, [dispatch, isLoggedIn]);
 
     const fAddTodolist = useCallback(
         (tdlTitle: string) => {
-            dispatch(createTodolistsTC(tdlTitle));
+            dispatch(createTodolists(tdlTitle));
         },
         [dispatch],
     );
 
     const fRemoveTodolist = useCallback(
         (todolistId: string) => {
-            dispatch(deleteTodolistsTC(todolistId));
+            dispatch(deleteTodolists(todolistId));
         },
         [dispatch],
     );
 
     const fUpdateTitleTodolist = useCallback(
         (todolistId: string, newTitle: string) => {
-            dispatch(updateTodolistsTC(todolistId, newTitle));
+            dispatch(updateTodolists({ todolistId, title: newTitle }));
         },
         [dispatch],
     );
 
     const fAddTask = useCallback(
         (todolistId: string, taskTitle: string) => {
-            dispatch(addTaskTC(todolistId, taskTitle));
+            dispatch(addTask({ todolistId, title: taskTitle }));
         },
         [dispatch],
     );
 
     const fRemoveTask = useCallback(
         (todolistId: string, taskId: string) => {
-            dispatch(removeTaskTC(todolistId, taskId));
+            dispatch(removeTask({ todolistId, taskId }));
         },
         [dispatch],
     );
 
     const fChangeTaskChekedValue = useCallback(
         (todolistId: string, taskId: string, status: TaskStatuses) => {
-            dispatch(updateTaskStatusTC(todolistId, taskId, status));
+            dispatch(updateTask({ todolistId, taskId, status }));
         },
         [dispatch],
     );
 
     const fUpdateTitleTask = useCallback(
         (todolistId: string, taskId: string, newTitle: string) => {
-            dispatch(updateTaskTitleTC(todolistId, taskId, newTitle));
+            dispatch(updateTask({ todolistId, taskId, title: newTitle }));
         },
         [dispatch],
     );
