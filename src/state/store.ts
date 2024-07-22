@@ -10,20 +10,29 @@ import { tasksReducer } from "./tasksSlice";
 // import { authReducer } from "../pages/Login/auth-reducer";
 // import { tasksReducer } from "./tasks-reducer";
 
-const rootReducer = combineReducers({
-    tasks: tasksReducer,
-    todolists: todolistsReducer,
-    app: appReducer,
-    auth: authReducer,
-});
+// const rootReducer = combineReducers({
+//     tasks: tasksReducer,
+//     todolists: todolistsReducer,
+//     app: appReducer,
+//     auth: authReducer,
+// });
 
+// export const store = configureStore({
+//     reducer: rootReducer,
+// })
 export const store = configureStore({
-    reducer: rootReducer,
+    reducer: {
+        tasks: tasksReducer,
+        todolists: todolistsReducer,
+        app: appReducer,
+        auth: authReducer,
+    },
 })
 
 export type AppRootStateType = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, UnknownAction>
-export type AppThunkDispatch = ThunkDispatch<AppRootStateType, any, AnyAction>;
+// export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, UnknownAction>
+// export type AppThunkDispatch = ThunkDispatch<AppRootStateType, any, AnyAction>;
+export type AppThunkDispatch = typeof store.dispatch
 
 export const useAppDisspatch = () => useDispatch<AppThunkDispatch>();
 

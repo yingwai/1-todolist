@@ -39,9 +39,9 @@ const TodolistWithSlice = () => {
         if (!isLoggedIn) {
             return;
         }
-
+        
         dispatch(getTodolists());
-    }, [dispatch, isLoggedIn]);
+    }, [dispatch]);
 
     const fAddTodolist = useCallback(
         (tdlTitle: string) => {

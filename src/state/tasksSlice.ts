@@ -4,7 +4,7 @@ import { FilterValueType, TasksStateType } from "../pages/Todolist/Todolist";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { todolistsThunk } from "./todolistsSlice";
 import { appActions } from "./appSlice";
-import { authActions } from "pages/Login/authSlice";
+import { authThunk } from "pages/Login/authSlice";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "utils";
 
 const slice = createSlice({
@@ -51,7 +51,7 @@ const slice = createSlice({
             .addCase(todolistsThunk.deleteTodolists.fulfilled, (state, action) => {
                 delete state[action.payload.id]
             })
-            .addCase(authActions.setIsLoggedIn, (state, action) => {
+            .addCase(authThunk.logout.fulfilled, (state, action) => {
                 if (!action.payload.isLoggedIn) return {};
             })
             .addCase(getTask.fulfilled, (state, action) => {

@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import { useAppDisspatch } from "../../state/store";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { loginTC, selectorAuthIsLoggedIn } from "./authSlice";
+import { login, selectorAuthIsLoggedIn } from "./authSlice";
 
 type FormikErrorType = {
     email?: string;
@@ -38,13 +38,13 @@ export const Login = () => {
             }
             if (!values.password) {
                 errors.password = "Required";
-            } else if (values.password.length < 5) {
-                errors.password = "Password must be more than 6 characters or more.";
+            } else if (values.password.length < 4) {
+                errors.password = "Password must be more than 4 characters or more.";
             }
-            return errors;
+            // return errors;
         },
         onSubmit: (values) => {
-            dispatch(loginTC(values));
+            dispatch(login({ data: values }))
             formik.resetForm();
         },
     });

@@ -4,7 +4,7 @@ import { TodolistType } from "../pages/Todolist/Todolist";
 import { createSlice } from "@reduxjs/toolkit";
 import { appActions } from "./appSlice";
 import { tasksActions } from "./tasksSlice";
-import { authActions } from "pages/Login/authSlice";
+import { authThunk } from "pages/Login/authSlice";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "utils";
 
 const slice = createSlice({
@@ -14,7 +14,7 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(authActions.setIsLoggedIn, (state, action) => {
+            .addCase(authThunk.logout.fulfilled, (state, action) => {
                 if (!action.payload.isLoggedIn) return []
             })
             .addCase(getTodolists.fulfilled, (state, action) => {

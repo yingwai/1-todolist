@@ -18,7 +18,7 @@ import { Outlet } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import { logoutTC, meTC, selectorAuthIsLoggedIn } from "pages/Login/authSlice";
+import { logout, me, selectorAuthIsLoggedIn } from "pages/Login/authSlice";
 import { selectorAppInitialized, selectorAppStatus } from "state/appSlice";
 
 type ThemeMode = "dark" | "light";
@@ -32,7 +32,7 @@ function AppWithSlice() {
     const [themeMode, setThemeMode] = useState<ThemeMode>("dark");
 
     useEffect(() => {
-        dispatch(meTC());
+        dispatch(me());
     }, [dispatch]);
 
     const theme = createTheme({
@@ -78,7 +78,7 @@ function AppWithSlice() {
                             </Grid>
 
                             {isLoggedIn && (
-                                <Button variant={"contained"} color={"inherit"} onClick={() => dispatch(logoutTC())}>
+                                <Button variant={"contained"} color={"inherit"} onClick={() => dispatch(logout())}>
                                     Logout
                                 </Button>
                             )}
