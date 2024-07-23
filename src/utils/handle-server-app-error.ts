@@ -5,6 +5,14 @@ import { ResponseType } from "../api/todolist-api";
 import { appActions } from "state/appSlice";
 import { AppThunkDispatch } from "state/store";
 
+/**
+ * Обрабатывает ошибки, полученные от сервера, и обновляет состояние приложения.
+ *
+ * @param dispatch - функция для отправки действий Redux.
+ * @param data - данные, полученные от сервера, которые могут быть строкой или объектом типа ResponseType.
+ * @param showError - флаг, указывающий, нужно ли отображать ошибку (по умолчанию true).
+ */
+
 // generic function
 export const handleServerAppError = <T>(dispatch: AppThunkDispatch, data: ResponseType<T> | string, showError: boolean = true) => {
     if (showError) {

@@ -2,10 +2,10 @@ import { ResultCode, todolistAPI } from "../api/todolist-api";
 import { STATUS_CODE } from "./app-reducer";
 import { TodolistType } from "../pages/Todolist/Todolist";
 import { createSlice } from "@reduxjs/toolkit";
-import { appActions } from "./appSlice";
 import { tasksActions } from "./tasksSlice";
 import { authThunk } from "pages/Login/authSlice";
-import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "utils";
+import { createAppAsyncThunk, handleServerAppError } from "utils";
+import { thunkTryCatch } from "utils/thunk-try-catch";
 
 const slice = createSlice({
     name: "todolists",
@@ -45,32 +45,22 @@ export const getTodolists = createAppAsyncThunk<
     { todolists: TodolistType[] },
     void
 >(
-    `${slice.name}/getTodolists`,
-    async (arg, thunkAPI) => {
-        const { dispatch, rejectWithValue } = thunkAPI;
-
-        try {
-            dispatch(appActions.setAppStatus({ status: STATUS_CODE.loading }));
-
+    `${slice.name}/getTodolists`, (_, thunkAPI) => {
+        return thunkTryCatch(thunkAPI, async () => {
             const res = await todolistAPI.getTodolists()
 
-            dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }));
             return { todolists: res.data }
-        } catch (error) {
-            handleServerNetworkError(dispatch, error)
-            return rejectWithValue(null)
-        }
+        })
     }
 )
 export const createTodolists = createAppAsyncThunk<
     { todolist: TodolistType },
     string
 >(
-    `${slice.name}/createTodolists`,
-    async (title: string, thunkAPI) => {
+    `${slice.name}/createTodolists`, (title: string, thunkAPI) => {
         const { dispatch, rejectWithValue } = thunkAPI;
 
-        try {
+        return thunkTryCatch(thunkAPI, async () => {
             const res = await todolistAPI.createTodolist(title)
 
             if (res.data.resultCode === ResultCode.success) {
@@ -79,21 +69,17 @@ export const createTodolists = createAppAsyncThunk<
                 handleServerAppError(dispatch, res.data);
                 return rejectWithValue(null)
             }
-        } catch (error) {
-            handleServerNetworkError(dispatch, error)
-            return rejectWithValue(null)
-        }
+        })
     }
 )
 export const deleteTodolists = createAppAsyncThunk<
     { id: string },
     string
 >(
-    `${slice.name}/deleteTodolists`,
-    async (todolistId: string, thunkAPI) => {
+    `${slice.name}/deleteTodolists`, (todolistId: string, thunkAPI) => {
         const { dispatch, rejectWithValue } = thunkAPI;
 
-        try {
+        return thunkTryCatch(thunkAPI, async () => {
             dispatch(tasksActions.changeTodolistEntityStatus({ id: todolistId, status: STATUS_CODE.loading }))
 
             const res = await todolistAPI.deleteTodolist(todolistId)
@@ -104,21 +90,17 @@ export const deleteTodolists = createAppAsyncThunk<
                 handleServerAppError(dispatch, res.data);
                 return rejectWithValue(null)
             }
-        } catch (error) {
-            handleServerNetworkError(dispatch, error)
-            return rejectWithValue(null)
-        }
+        })
     }
 )
 export const updateTodolists = createAppAsyncThunk<
     { id: string, title: string },
     { todolistId: string, title: string }
 >(
-    `${slice.name}/updateTodolists`,
-    async (arg, thunkAPI) => {
+    `${slice.name}/updateTodolists`, (arg, thunkAPI) => {
         const { dispatch, rejectWithValue } = thunkAPI;
 
-        try {
+        return thunkTryCatch(thunkAPI, async () => {
             dispatch(tasksActions.changeTodolistEntityStatus({ id: arg.todolistId, status: STATUS_CODE.loading }))
 
             const res = await todolistAPI.changeTitleTodolist(arg)
@@ -130,10 +112,7 @@ export const updateTodolists = createAppAsyncThunk<
                 handleServerAppError(dispatch, res.data);
                 return rejectWithValue(null)
             }
-        } catch (error) {
-            handleServerNetworkError(dispatch, error)
-            return rejectWithValue(null)
-        }
+        })
     }
 )
 

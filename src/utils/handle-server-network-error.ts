@@ -3,6 +3,13 @@ import { STATUS_CODE } from "state/app-reducer";
 import { appActions } from "state/appSlice";
 import { AppThunkDispatch } from "state/store";
 
+/**
+ * Обрабатывает сетевые ошибки, возникшие при выполнении запросов, и обновляет состояние приложения.
+ *
+ * @param dispatch - функция для отправки действий Redux.
+ * @param err - объект ошибки неизвестного типа.
+ */
+
 export const handleServerNetworkError = (dispatch: AppThunkDispatch, err: unknown): void => {
     let errorMessage = "Some error occurred";
 
