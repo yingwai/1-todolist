@@ -27,6 +27,6 @@ export const handleServerAppError = <T>(dispatch: AppThunkDispatch, data: Respon
             dispatch(appActions.setAppError({ error: "Some error occurred" }))
         }
         // dispatch(setAppStatusAC(STATUS_CODE.failed));
-        dispatch(appActions.setAppStatus({ status: STATUS_CODE.failed }))
+        // dispatch(appActions.setAppStatus({ status: STATUS_CODE.failed }))
     }
 };

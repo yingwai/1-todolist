@@ -1,9 +1,7 @@
 import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import { ResponseType } from "api/todolist-api";
-import { appActions } from "state/appSlice";
 import { AppRootStateType, AppThunkDispatch } from "state/store";
 import { handleServerNetworkError } from "./handle-server-network-error";
-import { STATUS_CODE } from "state/app-reducer";
 
 /**
  * Универсальная функция-обёртка для выполнения асинхронной логики с обработкой ошибок.
@@ -18,7 +16,7 @@ export const thunkTryCatch = async <T>(
 ): Promise<T | ReturnType<typeof thunkAPI.rejectWithValue>> => {
     const { dispatch, rejectWithValue } = thunkAPI;
     
-    dispatch(appActions.setAppStatus({ status: STATUS_CODE.loading }));
+    // dispatch(appActions.setAppStatus({ status: STATUS_CODE.loading }));
 
     try {
         return await logic();
@@ -26,6 +24,6 @@ export const thunkTryCatch = async <T>(
         handleServerNetworkError(dispatch, e);
         return rejectWithValue(null);
     } finally {
-        dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }));
+        // dispatch(appActions.setAppStatus({ status: STATUS_CODE.succeeded }));
     }
 };

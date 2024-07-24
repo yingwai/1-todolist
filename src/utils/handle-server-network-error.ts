@@ -1,5 +1,4 @@
 import axios from "axios";
-import { STATUS_CODE } from "state/app-reducer";
 import { appActions } from "state/appSlice";
 import { AppThunkDispatch } from "state/store";
 
@@ -22,7 +21,7 @@ export const handleServerNetworkError = (dispatch: AppThunkDispatch, err: unknow
     }
 
     dispatch(appActions.setAppError({ error: errorMessage }));
-    dispatch(appActions.setAppStatus({ status: STATUS_CODE.failed }));
+    // dispatch(appActions.setAppStatus({ status: STATUS_CODE.failed }));
 };
 
 // export const handleServerNetworkError = (dispatch: Dispatch, error: { message: string }) => {

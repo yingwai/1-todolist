@@ -1,6 +1,6 @@
 import { authAPI, LoginParamsType, ResultCode } from "../../api/todolist-api";
 import { handleServerAppError } from "../../utils/handle-server-app-error";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isFulfilled } from "@reduxjs/toolkit";
 import { appActions } from "state/appSlice";
 import { createAppAsyncThunk, thunkTryCatch } from "utils";
 
@@ -13,15 +13,13 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(me.fulfilled, (state, action) => {
-                state.isLoggedIn = action.payload.isLoggedIn
-            })
-            .addCase(login.fulfilled, (state, action) => {
-                state.isLoggedIn = action.payload.isLoggedIn
-            })
-            .addCase(logout.fulfilled, (state, action) => {
-                state.isLoggedIn = action.payload.isLoggedIn
-            })
+            .addMatcher(
+                isFulfilled(me, login, logout),
+                (state, action) => {
+                    state.isLoggedIn = action.payload.isLoggedIn;
+                }
+            );
+
     },
     selectors: {
         selectorAuthIsLoggedIn: state => state.isLoggedIn

@@ -1,5 +1,3 @@
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import { AnyAction, combineReducers, UnknownAction, } from "redux";
 import { useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "pages/Login/authSlice";
